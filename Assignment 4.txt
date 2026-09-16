@@ -1,0 +1,34 @@
+import csv
+def file_read(filename):
+    with open("{}".format(filename)) as fp:
+        r =  csv.DictReader(fp)
+        data = list(r)
+    return data
+
+def file_write(filename,data):
+    with open(f"{filename}_records.csv","w",newline='') as fp:
+        fn = data[0].keys()
+        w =  csv.DictWriter(fp,fieldnames=fn)
+        w.writeheader()
+        w.writerows(data)
+
+def filter_records(dept,data):
+    dept_records = []
+    for line in data:
+        if line['dept'] == dept:
+            dept_records.append(line)
+
+    return dept_records
+
+def main():
+    filename = 'empsal_part_buck.csv'
+    data = file_read(filename)
+    depts = set()
+    for element1 in data:
+        depts.add(element1["dept"])
+    for element2 in depts:
+        dept_records_data = filter_records(element2,data)
+        file_write(element2,dept_records_data)
+
+if __name__=='__main__':
+    main()
